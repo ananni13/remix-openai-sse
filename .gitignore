@@ -1,0 +1,13 @@
+.DS_Store
+
+node_modules
+
+.env
+.output
+
+.mailing
+/.cache
+/build
+/public/build
+
+/app/styles/tailwind.css
