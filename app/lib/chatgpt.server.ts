@@ -1,12 +1,25 @@
 import { serverError } from "remix-utils";
 
-export async function chatGPT({
-  prompt = "Hello!",
-  stream = false,
-}: {
+export type ChatGPTRequest = {
   prompt?: string | null;
-  stream?: boolean;
-}) {
+  system?: string | null;
+};
+
+export async function chatGPT(
+  options: ChatGPTRequest
+): Promise<ChatCompletionsResponse> {
+  return (await fetchChatGPT(options)).json();
+}
+
+export async function streamChatGPT(options: ChatGPTRequest) {
+  return fetchChatGPT({ ...options, stream: true });
+}
+
+async function fetchChatGPT({
+  prompt = "Hello!",
+  system = "",
+  stream = false,
+}: ChatGPTRequest & { stream?: boolean }) {
   if (
     !process.env.OPENAI_API_KEY ||
     typeof process.env.OPENAI_API_KEY !== "string"
@@ -22,8 +35,15 @@ export async function chatGPT({
     },
     body: JSON.stringify({
       model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        {
+          role: "system",
+          content: system,
+        },
+        { role: "user", content: prompt },
+      ],
       max_tokens: 1024,
+      temperature: 0.8,
       stream,
     }),
   });

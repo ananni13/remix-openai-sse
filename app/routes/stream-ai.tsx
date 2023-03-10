@@ -9,44 +9,50 @@ export default function Component() {
   return (
     <div>
       <h1>Stream AI</h1>
-      <label htmlFor="prompt">Prompt</label>
-      <textarea
-        id="prompt"
-        name="prompt"
-        value={inputPrompt}
-        onChange={(e) => setInputPrompt(e.target.value)}
-        required
-        minLength={2}
-      />
-      <button onClick={() => setPrompt(inputPrompt)}>Ask</button>
-      <button
-        onClick={() => {
-          setPrompt("");
-          setInputPrompt("");
-        }}
-      >
-        Clear
-      </button>
+      <div>
+        <label htmlFor="prompt">Prompt</label>
+        <textarea
+          id="prompt"
+          name="prompt"
+          value={inputPrompt}
+          onChange={(e) => setInputPrompt(e.target.value)}
+          required
+          minLength={2}
+        />
+      </div>
+      <div>
+        <button onClick={() => setPrompt(inputPrompt)}>Ask</button>
+        <button
+          onClick={() => {
+            setPrompt("");
+            setInputPrompt("");
+          }}
+        >
+          Clear
+        </button>
+      </div>
       {prompt && <Prompt prompt={prompt} />}
     </div>
   );
 }
 
 function Prompt({ prompt }: { prompt: string }) {
-  const token = useEventSource(`/sse/ai?prompt=${prompt}`, {
+  const chunk = useEventSource(`/sse/ai?prompt=${prompt}`, {
     closeOnData: "[DONE]",
   });
-  const [message, setMessage] = useState<any[]>([]);
+
+  const [messages, setMessages] = useState<ChunkChatCompletionsResponse[]>([]);
+
   useEffect(() => {
-    if (token) {
-      setMessage((message) => message.concat(JSON.parse(token)));
+    if (chunk) {
+      setMessages((message) => message.concat(JSON.parse(chunk)));
     }
-  }, [token]);
+  }, [chunk]);
 
   return (
     <div style={{ whiteSpace: "pre-wrap" }}>
       <p>
-        {message.map((m, i) => (
+        {messages.map((m, i) => (
           <Fragment key={i}>{m.choices[0]?.delta?.content}</Fragment>
         ))}
       </p>
