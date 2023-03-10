@@ -1,11 +1,11 @@
-import { useEventSource } from "remix-utils";
+import { useEventSource } from "~/lib/use-event-source";
 
 export default function Component() {
   const time = useEventSource("/sse/time", { event: "time" });
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-      <h1>Welcome to Remix-SSE</h1>
+      <h1>SSE</h1>
       <div>
         {time && (
           <time dateTime={time}>

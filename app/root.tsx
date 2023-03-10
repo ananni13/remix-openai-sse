@@ -27,7 +27,7 @@ export default function App() {
           <nav>
             <ul>
               <li>
-                <Link to="/">Home</Link>
+                <Link to="/">SSE</Link>
               </li>
               <li>
                 <Link to="/ai">AI</Link>

@@ -19,11 +19,12 @@ export default function Component() {
 
   return (
     <div>
-      <h1>Welcome to Remix-AI</h1>
+      <h1>AI</h1>
       <Form method="post">
         <label htmlFor="prompt">Prompt</label>
-        <input id="prompt" name="prompt" type="text" required />
+        <textarea id="prompt" name="prompt" required minLength={2} />
         <button>Ask</button>
+        <button type="reset">Clear</button>
       </Form>
       <div>
         {data?.choices[0]?.message && <p>{data.choices[0].message.content}</p>}
