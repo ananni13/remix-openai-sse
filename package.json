@@ -1,4 +1,5 @@
 {
+  "name": "remix-openai-sse",
   "private": true,
   "sideEffects": false,
   "scripts": {
