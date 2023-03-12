@@ -17,6 +17,7 @@ export function useEventSource(
   { event = "message", closeOnData, init }: EventSourceOptions = {}
 ) {
   const [data, setData] = useState<string | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const eventSource = new EventSource(url, init);
@@ -24,6 +25,7 @@ export function useEventSource(
 
     // reset data if dependencies change
     setData(null);
+    setIsOpen(true);
 
     function handler(event: MessageEvent) {
       if (event.data === closeOnData) {
@@ -36,10 +38,11 @@ export function useEventSource(
     function close() {
       eventSource.removeEventListener(event ?? "message", handler);
       eventSource.close();
+      setIsOpen(false);
     }
 
     return () => close();
   }, [url, event, closeOnData, init]);
 
-  return data;
+  return { data, isOpen };
 }

@@ -1,0 +1,14 @@
+.cursor {
+  margin-left: 2px;
+  width: 8px;
+  height: 18px;
+  background: #9b9ea3;
+  display: inline-block;
+  animation: cursor-blink 1.5s steps(2) infinite;
+}
+
+@keyframes cursor-blink {
+  0% {
+    opacity: 0;
+  }
+}

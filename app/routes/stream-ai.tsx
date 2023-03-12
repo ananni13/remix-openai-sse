@@ -37,7 +37,7 @@ export default function Component() {
 }
 
 function Prompt({ prompt }: { prompt: string }) {
-  const chunk = useEventSource(`/sse/ai?prompt=${prompt}`, {
+  const { data: chunk, isOpen } = useEventSource(`/sse/ai?prompt=${prompt}`, {
     closeOnData: "[DONE]",
   });
 
@@ -55,6 +55,7 @@ function Prompt({ prompt }: { prompt: string }) {
         {messages.map((m, i) => (
           <Fragment key={i}>{m.choices[0]?.delta?.content}</Fragment>
         ))}
+        {isOpen && <span className="cursor"></span>}
       </p>
     </div>
   );

@@ -1,8 +1,8 @@
 import { serverError } from "remix-utils";
 
 export type ChatGPTRequest = {
-  prompt?: string | null;
-  system?: string | null;
+  systemPrompt?: string | null;
+  userPrompt?: string | null;
 };
 
 export async function chatGPT(
@@ -16,8 +16,8 @@ export async function streamChatGPT(options: ChatGPTRequest) {
 }
 
 async function fetchChatGPT({
-  prompt = "Hello!",
-  system = "",
+  userPrompt = "Hello!",
+  systemPrompt = "",
   stream = false,
 }: ChatGPTRequest & { stream?: boolean }) {
   if (
@@ -38,9 +38,9 @@ async function fetchChatGPT({
       messages: [
         {
           role: "system",
-          content: system,
+          content: systemPrompt,
         },
-        { role: "user", content: prompt },
+        { role: "user", content: userPrompt },
       ],
       max_tokens: 1024,
       temperature: 0.8,

@@ -5,18 +5,18 @@ import { chatGPT } from "~/lib/chatgpt.server";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
-  const prompt = formData.get("prompt");
-  const system = formData.get("system");
+  const userPrompt = formData.get("prompt");
+  const systemPrompt = formData.get("system");
 
-  if (!prompt || typeof prompt !== "string") {
-    throw badRequest({ message: "Bad prompt" });
+  if (!userPrompt || typeof userPrompt !== "string") {
+    throw badRequest({ message: "Bad user prompt" });
   }
 
-  if (system && typeof system !== "string") {
-    throw badRequest({ message: "Bad system" });
+  if (systemPrompt && typeof systemPrompt !== "string") {
+    throw badRequest({ message: "Bad system prompt" });
   }
 
-  return chatGPT({ prompt, system });
+  return chatGPT({ userPrompt, systemPrompt });
 }
 
 export default function Component() {
@@ -27,11 +27,11 @@ export default function Component() {
       <h1>AI</h1>
       <Form method="post">
         <div>
-          <label htmlFor="system">System</label>
+          <label htmlFor="system">System Prompt</label>
           <input id="system" name="system" type="text" />
         </div>
         <div>
-          <label htmlFor="prompt">Prompt</label>
+          <label htmlFor="prompt">User Prompt</label>
           <textarea id="prompt" name="prompt" required minLength={2} />
         </div>
         <div>

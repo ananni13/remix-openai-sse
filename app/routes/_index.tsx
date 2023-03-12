@@ -1,7 +1,7 @@
 import { useEventSource } from "~/lib/use-event-source";
 
 export default function Component() {
-  const time = useEventSource("/sse/time", { event: "time" });
+  const { data: time } = useEventSource("/sse/time", { event: "time" });
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
