@@ -1,39 +1,16 @@
-type BaseChatCompletionsChoice = {
-  index: number;
-  finish_reason: "stop" | "length" | "content_filter" | null;
-};
+import {
+  type ChatCompletionResponseMessageRoleEnum,
+  type CreateChatCompletionResponseChoicesInner,
+} from "openai";
 
-type ChatCompletionsChoice = BaseChatCompletionsChoice & {
-  message: {
-    role: "system" | "user" | "assistant";
-    content: string;
-  };
-};
-
-type ChunkChatCompletionsChoice = BaseChatCompletionsChoice & {
-  delta: {
-    content?: string;
-  };
-};
-
-type BaseChatCompletionsResponse<Choice> = {
-  id: string;
-  created: number;
-  model: string;
-  choices: Choice[];
-};
-
-type ChatCompletionsResponse =
-  BaseChatCompletionsResponse<ChatCompletionsChoice> & {
-    object: "chat.completion";
-    usage: {
-      prompt_tokens: number;
-      completion_tokens: number;
-      total_tokens: number;
+declare module "openai" {
+  // Add missing `delta` field for streaming responses
+  interface CreateChatCompletionResponseChoicesInner {
+    delta?: {
+      role?: ChatCompletionResponseMessageRoleEnum;
+      content?: string;
     };
-  };
+  }
+}
 
-type ChunkChatCompletionsResponse =
-  BaseChatCompletionsResponse<ChunkChatCompletionsChoice> & {
-    object: "chat.completion.chunk";
-  };
+export default CreateChatCompletionResponseChoicesInner;

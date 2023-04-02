@@ -1,7 +1,7 @@
-import type { ActionArgs } from "@remix-run/node";
+import { type ActionArgs, json } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { badRequest } from "remix-utils";
-import { chatGPT } from "~/lib/chatgpt.server";
+import { fetchChatGPT } from "~/lib/chatgpt.server";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -16,7 +16,7 @@ export async function action({ request }: ActionArgs) {
     throw badRequest({ message: "Bad system prompt" });
   }
 
-  return chatGPT({ userPrompt, systemPrompt });
+  return json({ response: await fetchChatGPT({ userPrompt, systemPrompt }) });
 }
 
 export default function Component() {
@@ -40,7 +40,9 @@ export default function Component() {
         </div>
       </Form>
       <div>
-        {data?.choices[0]?.message && <p>{data.choices[0].message.content}</p>}
+        {data?.response.choices[0]?.message && (
+          <p>{data.response.choices[0].message.content}</p>
+        )}
       </div>
     </div>
   );

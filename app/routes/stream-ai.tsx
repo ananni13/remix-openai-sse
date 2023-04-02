@@ -1,3 +1,4 @@
+import { type CreateChatCompletionResponse } from "openai";
 import { Fragment, useEffect, useState } from "react";
 import { useEventSource } from "~/lib/use-event-source";
 
@@ -41,7 +42,7 @@ function Prompt({ prompt }: { prompt: string }) {
     closeOnData: "[DONE]",
   });
 
-  const [messages, setMessages] = useState<ChunkChatCompletionsResponse[]>([]);
+  const [messages, setMessages] = useState<CreateChatCompletionResponse[]>([]);
 
   useEffect(() => {
     if (chunk) {

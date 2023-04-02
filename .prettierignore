@@ -1,0 +1,14 @@
+.DS_Store
+
+node_modules
+
+.env
+.output
+
+/.cache
+/build
+/public/build
+
+/.husky
+/app/routes.d.ts
+*-lock.json
